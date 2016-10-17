@@ -83,13 +83,13 @@ out = []
 for i in sampleNam:
     string = [i]
     for j in onlyfiles:
-        if i in j:
+        if i+"_" in j:
             if "Decombinator" in j:
                 for patt in fields[1:4]:
                      string2 = readFile(pathToLogs, j, patt)
                      string.append(string2)
     for j in onlyfiles:
-        if i in j:
+        if i+"_" in j:
             if "Collapsing" in j:
                 for patt in fields[4:]:
                      string2 = readFile(pathToLogs, j, patt)
