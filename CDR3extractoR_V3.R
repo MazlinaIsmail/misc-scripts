@@ -1,4 +1,6 @@
-# modified from CDR3extractoR.R
+# Mar 2017
+# MI
+# this version modified from CDR3extractoR_V2.R by Benny Chain (UCL)
 
 ##### Pseudocode #####
 # read in .dcrcdr3 files from directory
