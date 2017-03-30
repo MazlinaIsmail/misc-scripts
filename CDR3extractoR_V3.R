@@ -16,17 +16,17 @@
 # change output file extension
 
 # parent directory
-path_to_files = "/Volumes/BF_MI_1/sorted-naive-memory/M37_n12/Translated_dcrcdr3"
+path_to_files = "/Volumes/BF_MI_1/sorted-naive-memory/M37_n12/Translated_dcrcdr3/test"
 # set pattern to specific filenames
 # remove pattern parameter if alpha or beta files are in separate dirs
-files <- list.files(path_to_files, pattern="beta.*naive", full.names=T, recursive=F)
+files <- list.files(path_to_files, pattern="alpha.*naive", full.names=T, recursive=F)
 
 library(Biostrings)
 link_to_github_fasta <- "https://raw.githubusercontent.com/innate2adaptive/Decombinator-Tags-FASTAs/master/"
 
 # load ref file for CDR1 and CDR2 sequences
-ref_cdr1 <- readAAStringSet("~/Desktop/human_TRV_CDR1.fasta", format="fasta", use.names=T)
-ref_cdr2 <- readAAStringSet("~/Desktop/human_TRV_CDR2.fasta", format="fasta", use.names=T)
+ref_cdr1 <- readAAStringSet("/Volumes/BF_MI_2/misc-scripts/human_TRV_CDR1.fasta", format="fasta", use.names=T)
+ref_cdr2 <- readAAStringSet("/Volumes/BF_MI_2/misc-scripts/human_TRV_CDR2.fasta", format="fasta", use.names=T)
 
 # define function
 CDR3extract<-function(file=ids, chain, species) {
@@ -137,9 +137,12 @@ if(chain=="alpha"){
   #check for FGXG or WGXG
   FGXG_region<-subseq(TCR_AA,start=(ln - 18),end=(ln - 5))
   FGXG<-grep("[F,W]G.G",FGXG_region)
-  all<-intersect(inframe,intersect(cys,FGXG))
+  #missing CDR3 altogether (or has negative length)
+  len_ch<-(width(TCR_AA) -  AJ_GXG_e[(file [,2]+1)])-AV_C[file [,1]+1] 
+  CDR3_posl<-which(len_ch > 0)
+  all<-intersect(inframe,intersect(cys,intersect(FGXG,CDR3_posl)))
   proportion<-length(all)/length(TCR_AA)
-  CDR3<-subseq(TCR_AA,start=AV_C[file [,1]+1],end=width(TCR_AA)-AJ_GXG_e[(file [,2]+1)])[all]
+  CDR3<-subseq(TCR_AA[all],start=AV_C[file [all,1]+1],end=ln[all]-AJ_GXG_e[(file [all,2]+1)])
   V_names<-names_AV[file [,1]+1][all]
   J_names<-names_AJ[file [,2]+1][all]
                 }
@@ -159,9 +162,12 @@ if(chain=="beta"){
   #check for FGXG or WGXG
   FGXG_region<-subseq(TCR_AA,start=(ln - 18),end=(ln - 5))
   FGXG<-grep("[F,W]G.G",FGXG_region)
-  all<-intersect(inframe,intersect(cys,FGXG))
+  #missing CDR3 altogether
+  len_ch<-(width(TCR_AA) -  BJ_GXG_e[(file [,2]+1)])-BV_C[file [,1]+1] 
+  CDR3_posl<-which(len_ch > 0)
+  all<-intersect(inframe,intersect(cys,intersect(FGXG,CDR3_posl)))
   proportion<-length(all)/length(TCR_AA)
-  CDR3<-subseq(TCR_AA,start=BV_C[file [,1]+1],end=width(TCR_AA)-BJ_GXG_e[(file [,2]+1)])[all]
+  CDR3<-subseq(TCR_AA[all],start=BV_C[file [all,1]+1],end=ln[all]-BJ_GXG_e[(file [all,2]+1)])
   V_names<-names_BV[file [,1]+1][all]
   J_names<-names_AJ[file [,2]+1][all]
             }
@@ -179,7 +185,7 @@ for (f in files){
 	ids[,5] = sub(":.*", "", ids[,5])
 	
 	# assign variable to output from function
-	output <- CDR3extract(file=ids, chain="beta", species="human")
+	output <- CDR3extract(file=ids, chain="alpha", species="human")
 
 	# use values in all to get only productive TCR_AA
 	prod_TCR_AA <- output[[2]][output[[7]],]
