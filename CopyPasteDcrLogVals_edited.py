@@ -19,10 +19,13 @@
 
 ##### How to run #####
 
-# python CopyPasteDcrLogVals.py full/path/to/Logs/folder/ full/path/to/index/file outfile.csv
+# python CopyPasteDcrLogVals.py full/path/to/Logs/folder/ outfile.csv
 
-# NB assumes that all Log files are in one Log folder
-#    prints the output file to whatever directory you are in
+# NB 
+# assumes that all Log files are in one Log folder
+# prints the output file to whatever directory you are in
+# may require slight modification on line 94, depending on character separator 
+#  for grabbing filename in original log file
  
 ##### Py packages #####
 
