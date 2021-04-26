@@ -17,7 +17,6 @@ while any(previous_group) == True:
     try:
         group = list()
         idx = random.sample(range(0, len(previous_group)), 4)
-        print(idx)
         for i in idx:
             member = random.choice(previous_group[i])
             group.append(member)
@@ -31,7 +30,7 @@ while any(previous_group) == True:
         random.shuffle(remainder_all)
         split = [remainder_all[i:i + 4] for i in range(0, len(remainder_all), 4)]
         for i in split:
-            print("index error")
+            print("*")
             print(count, i, "\n", sep="\t")
             count+=1
         break
