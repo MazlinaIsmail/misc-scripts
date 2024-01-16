@@ -16,6 +16,6 @@
 *      > Save
 */
 
-createAnnotationsFromPixelClassifier("detect_tissue", 0.0, 0.0, "SPLIT", "DELETE_EXISTING", "INCLUDE_IGNORED", "SELECT_NEW")
+createAnnotationsFromPixelClassifier("detect_tissue", 0.0, 0.0, "DELETE_EXISTING", "INCLUDE_IGNORED", "SELECT_NEW")
 evaluate(new File("/Volumes/Elements_1/stampede_mif/groovy-scripts/stardist-fluorescence-cell-detection.groovy"))
 
